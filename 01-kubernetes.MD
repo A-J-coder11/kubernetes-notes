@@ -1,0 +1,103 @@
+docker dis advantages
+Auto scaling -> no default auto scaling mothods
+Load Balancing -> no load balancing components to balance traffic b/w multiple containers
+reliability -> if containers crashes, it will not restart on its own(self healing)
+what if docker crashes?
+what about the storage ? if docker host crashes we will loose data also
+networking is only bridge mode, if you have multiple docker hosts bridge networking will not work 
+
+
+container orchestrator 
+----------------------
+kubernetes from google
+docker swarm vs kubernetes
+
+autoscaling is easy, storge is outside of clusters, rollbacks and multiple deployment startegies are available in kubernetes, networking between conatiners is little easy in kubernetes
+
+1. Build the image in docker
+2. Run in kubernetes
+
+
+
+work station
+------------
+
+1.install docker
+2.run aws configure
+3.install eksctl for cluster creation
+4.install kubectl for cluster interactions
+
+-> aws configure
+-> instal eksctl.io
+      <!-- https://eksctl.io/installation/ -->
+    -> ARCH=amd64
+    -> PLATFORM=$(uname -s)_$ARCH
+    -> curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+    -> curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+    -> tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+    -> sudo install -m 0755 /tmp/eksctl /usr/local/bin && rm /tmp/eksctl
+    -> ekctl version
+-> Kubectl from aws install    
+        <!-- https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html -->
+-> curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.3/2025-08-03/bin/darwin/amd64/kubectl
+-> chmod +x ./kubectl
+-> sudo mv kubectl /usr/local/bin/kubectl
+-> kubectl version
+-> history
+
+
+spot instances
+=============
+on demand --> whenever you require you create instances, aws gurantees you to get instance -- 1$/hour
+
+spot --> AWS data center has lot of resources so it will give it for less cost 70-90 percent discount -- 20cents/hour 
+if any on demand comes itwill again take the giving a notice beofre 2 min, they will kill instances
+so we cannot use for production only for testing and others we can use it
+
+to create clusters
+-------------------
+
+https://github.com/eksctl-io//eksctl/tree/main/examples/
+managed-nodes.yaml
+
+-> check eks.yaml 
+-> git commit / git pull
+-> cd kubernetes-notes/
+-> ls -l
+<!-- -> eksctl create cluster --config-file-eks.yaml -->
+-> check in AWS accont by EKS go into the cluster project1 cluster will be created
+-> in mobex cd
+-> kubectl get nodes -- shows worker nodes
+-> you need to congiure aws after that it will work
+
+
+everything is called as resources in kubernetes
+k8 is paas platform as a service
+
+namespace --> isolated project space in kubernetes where you can create your workloads
+
+1. NAMESPACE
+      -> create repository
+      -> cd k8-reosucres in gitbash
+      -> git init
+      -> git branch -M main
+      -> git remote add origin <git url >
+      -> git add . ; git commit -m "kubernetes" ; git push origin main
+
+      -> in mobex
+      -> git pull
+      -> k8-services/
+      -> ls -l
+      -> kubectl apply -f 01-namespace.yaml  
+      -> kubectl get namespaces //to see the created spaces
+      -> kubectl del -f 01-namespace.yaml  // to del
+POD  == containers
+pod is a small deployable unit in th =e kubernetes, one pod can have multiple containers
+
+
+----------------------------------------------------
+02-pod.yaml
+
+-> git pull
+-> kubectl apply -f 02-pod.yaml
+-> kubectl get pods
